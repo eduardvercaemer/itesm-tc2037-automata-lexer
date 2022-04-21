@@ -13,6 +13,14 @@
             (assoc-in state [:token] ""))
     state))
 
+(defn- match-symbol
+  "Defines the different kinds of symbols"
+  [where symbol]
+  (case where
+    :one (= symbol \1)
+    :any true
+    :end (= symbol nil)))
+
 (defn run
   "Run an automata
    ---------------
@@ -20,11 +28,6 @@
    transition actions until the machine reaches a :halt state"
   [automata input]
   (let [input (seq input)
-        match-symbol (fn [where symbol]
-                       (case where
-                         :one (= symbol \1)
-                         :any true
-                         :end (= symbol nil)))
         find-transition (fn [transitions symbol]
                           (first (filter (fn [{where :where}]
                                            (match-symbol where symbol)) transitions)))]
