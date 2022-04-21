@@ -8,16 +8,35 @@
     :invalid (do
                (println "INVALID SYMBOL")
                state)
-    :show (do
-            (println "token: " (:token state))
-            (assoc-in state [:token] ""))
+    :out-comment (do
+                   (println "COMMENT:" (:token state))
+                   (assoc-in state [:token] ""))
+    :out-token (do
+                 (println "TOKEN:" (:token state))
+                 (assoc-in state [:token] ""))
+    :out-equal (do
+                 (println "EQUAL")
+                 (assoc-in state [:token] ""))
+    :out-token-and-equal (do
+                           (println "TOKEN:" (:token state))
+                           (println "EQUAL")
+                           (assoc-in state [:token] ""))
+    :out-one (do
+               (println "ONE")
+               state)
     state))
 
 (defn- match-symbol
   "Defines the different kinds of symbols"
   [where symbol]
   (case where
+    :ws (= symbol \ )
+    :newline (= symbol \newline)
     :one (= symbol \1)
+    :equal (= symbol \=)
+    :slash (= symbol \/)
+    :istart (and (>= (int symbol) (int \a)) (<= (int symbol) (int \z)))
+    :irest (and (>= (int symbol) (int \a)) (<= (int symbol) (int \z)))
     :any true
     :end (= symbol nil)))
 
@@ -39,7 +58,7 @@
     (loop [curr (:start automata)
            [symbol & rest] input
            state {:token ""}]
-      (prn {:curr curr :symbol symbol :state state})
+      ;;(prn {:curr curr :symbol symbol :state state})
       (let [transitions (get-in automata [:transitions curr])
             transition (find-transition transitions symbol)
             to (:to transition)
