@@ -30,13 +30,24 @@
                                   (println "OP:" (:token state))
                                   (assoc-in state [:token] ""))
                         :add-paren (update-in state [:paren] inc)
-                        :del-paren (update-in state [:paren] dec)
+                        :del-paren (let [paren (:paren state)]
+                                     (cond
+                                       (> paren 0) (update-in state [:paren] dec)
+                                       :else (do
+                                               (println "INVALID CLOSING PARENTHESIS")
+                                               (assoc-in state [:invalid] true))))
                         :out-oparen (do
-                                      (println "(" (:paren state))
+                                      (println "(")
                                       state)
                         :out-cparen (do
-                                      (println ")" (:paren state))
+                                      (println ")")
                                       state)
+                        :check-paren (let [paren (:paren state)]
+                                       (cond
+                                         (> paren 0) (do
+                                                       (println "PARENTHESIS NOT CLOSED CORRECTLY")
+                                                       (assoc-in state [:invalid] true))
+                                         :else state))
                         (do
                           (println "INVALID ACTION" action)
                           state))
@@ -53,7 +64,7 @@
     :slash (= symbol \/)
     :oparen (= symbol \()
     :cparen (= symbol \))
-    :op (contains? #{\+ \* \- \/} symbol)
+    :op (contains? #{\+ \* \- \/ \^} symbol)
     :num (and (>= (int symbol) (int \0)) (<= (int symbol) (int \9)))
     :lower (and (>= (int symbol) (int \a)) (<= (int symbol) (int \z)))
     :upper (and (>= (int symbol) (int \A)) (<= (int symbol) (int \Z)))
@@ -93,7 +104,9 @@
             transition (find-transition transitions symbol)
             to (:to transition)
             action (:action transition)
-            state (run-action state action symbol)]
-        (case to
-          :halt nil
-          (recur to rest state))))))
+            state (run-action state action symbol)
+            invalid (:invalid state)]
+        (if invalid nil
+            (case to
+              :halt nil
+              (recur to rest state)))))))
