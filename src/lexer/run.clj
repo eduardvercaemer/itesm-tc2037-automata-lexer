@@ -25,7 +25,9 @@
   "Find the first valid transition for a symbol"
   [transitions symbol]
   (let [matches? #(match-symbol (:where %) symbol)]
-    (first (filter matches? transitions))))
+    (or
+     (first (filter matches? transitions))
+     {:where :any :to :halt :action :invalid})))
 
 (defn run
   "Run an automata
