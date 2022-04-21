@@ -20,8 +20,17 @@
                               {:where :ws :to :asg-equal :action :out-token}
                               {:where :equal :to :asg-expr :action [:out-token :out-equal]}]
     :asg-equal               [{:where :equal :to :asg-expr :action :out-equal}]
-    :asg-expr                [{:where :ws :to :asg-expr}
-                              {:where :one :to :asg-end :action :out-one}]
+    :asg-expr                [{:where :num :to :expr-num :action :eat}
+                              {:where :ws :to :asg-expr}]
+    :expr-num                [{:where :num :to :expr-num :action :eat}
+                              {:where :newline :to :stmt :action :out-num}
+                              {:where :end :to :halt :action :out-num}
+                              {:where :op :to :asg-expr :action [:out-num :eat :out-op]}
+                              {:where :ws :to :expr-op :action :out-num}]
+    :expr-op                 [{:where :ws :to :expr-op}
+                              {:where :newline :to :stmt}
+                              {:where :end :to :halt}
+                              {:where :op :to :asg-expr :action [:eat :out-op]}]
     :asg-end                 [{:where :ws :to :asg-end}
                               {:where :newline :to :stmt}
                               {:where :end :to :halt}]}})
@@ -29,4 +38,4 @@
 (defn -main
   "I don't do a whole lot ... yet."
   [& _]
-  (run language " abc=  1  \n\n  \n\n \n\n // this is a comment \nbc=1\na =1"))
+  (run language " abc=  34* 7  \n\n a = 5 - 7  \n\n \n\n // this is a comment \nbc=1\na = 456 "))

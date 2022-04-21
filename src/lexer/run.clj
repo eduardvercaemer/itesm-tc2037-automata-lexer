@@ -22,6 +22,12 @@
                         :out-one (do
                                    (println "ONE")
                                    state)
+                        :out-num (do
+                                   (println "NUM:" (:token state))
+                                   (assoc-in state [:token] ""))
+                        :out-op (do
+                                  (println "OP:" (:token state))
+                                  (assoc-in state [:token] ""))
                         state)))
 
 (defn- match-symbol
@@ -33,6 +39,7 @@
     :one (= symbol \1)
     :equal (= symbol \=)
     :slash (= symbol \/)
+    :op (contains? #{\+ \* \- \/} symbol)
     :num (and (>= (int symbol) (int \0)) (<= (int symbol) (int \9)))
     :lower (and (>= (int symbol) (int \a)) (<= (int symbol) (int \z)))
     :upper (and (>= (int symbol) (int \A)) (<= (int symbol) (int \Z)))
