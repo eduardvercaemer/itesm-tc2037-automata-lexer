@@ -35,8 +35,13 @@
     :one (= symbol \1)
     :equal (= symbol \=)
     :slash (= symbol \/)
-    :istart (and (>= (int symbol) (int \a)) (<= (int symbol) (int \z)))
-    :irest (and (>= (int symbol) (int \a)) (<= (int symbol) (int \z)))
+    :num (and (>= (int symbol) (int \0)) (<= (int symbol) (int \9)))
+    :lower (and (>= (int symbol) (int \a)) (<= (int symbol) (int \z)))
+    :upper (and (>= (int symbol) (int \A)) (<= (int symbol) (int \Z)))
+    :under (= symbol \_)
+    :alpha (or (match-symbol :lower symbol) (match-symbol :upper symbol))
+    :istart (or (match-symbol :alpha symbol) (match-symbol :under symbol))
+    :irest (or (match-symbol :istart symbol) (match-symbol :num symbol))
     :any true
     :end (= symbol nil)))
 
