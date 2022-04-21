@@ -39,6 +39,8 @@
     :one (= symbol \1)
     :equal (= symbol \=)
     :slash (= symbol \/)
+    :oparen (= symbol \()
+    :cparen (= symbol \))
     :op (contains? #{\+ \* \- \/} symbol)
     :num (and (>= (int symbol) (int \0)) (<= (int symbol) (int \9)))
     :lower (and (>= (int symbol) (int \a)) (<= (int symbol) (int \z)))
