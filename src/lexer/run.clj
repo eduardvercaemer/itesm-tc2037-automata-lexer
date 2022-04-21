@@ -21,16 +21,19 @@
     :any true
     :end (= symbol nil)))
 
+(defn- find-transition
+  "Find the first valid transition for a symbol"
+  [transitions symbol]
+  (let [matches? #(match-symbol (:where %) symbol)]
+    (first (filter matches? transitions))))
+
 (defn run
   "Run an automata
    ---------------
    Given start state and transition map, steps the automata performing the
    transition actions until the machine reaches a :halt state"
   [automata input]
-  (let [input (seq input)
-        find-transition (fn [transitions symbol]
-                          (first (filter (fn [{where :where}]
-                                           (match-symbol where symbol)) transitions)))]
+  (let [input (seq input)]
     (loop [curr (:start automata)
            [symbol & rest] input
            state {:token ""}]
