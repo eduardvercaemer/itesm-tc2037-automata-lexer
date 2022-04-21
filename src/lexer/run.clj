@@ -3,6 +3,7 @@
 (defn- run-action
   "Perform different actions"
   [state action symbol]
+  ;;(prn {:in "RUN-ACTION" :state state :action action})
   (cond
     (vector? action) (reduce #(run-action %1 %2 symbol) state action)
     (keyword? action) (case action
@@ -28,7 +29,18 @@
                         :out-op (do
                                   (println "OP:" (:token state))
                                   (assoc-in state [:token] ""))
-                        state)))
+                        :add-paren (update-in state [:paren] inc)
+                        :del-paren (update-in state [:paren] dec)
+                        :out-oparen (do
+                                      (println "(" (:paren state))
+                                      state)
+                        :out-cparen (do
+                                      (println ")" (:paren state))
+                                      state)
+                        (do
+                          (println "INVALID ACTION" action)
+                          state))
+    :else state))
 
 (defn- match-symbol
   "Defines the different kinds of symbols"
@@ -75,7 +87,7 @@
   (let [input (seq input)]
     (loop [curr (:start automata)
            [symbol & rest] input
-           state {:token ""}]
+           state {:token "" :paren 0}]
       ;;(prn {:curr curr :symbol symbol :state state})
       (let [transitions (get-in automata [:transitions curr])
             transition (find-transition transitions symbol)

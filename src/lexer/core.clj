@@ -20,16 +20,20 @@
                               {:where :ws :to :asg-equal :action :out-token}
                               {:where :equal :to :asg-expr :action [:out-token :out-equal]}]
     :asg-equal               [{:where :equal :to :asg-expr :action :out-equal}]
+    ;; beginning of expression
     :asg-expr                [{:where :num :to :expr-num :action :eat}
+                              {:where :oparen :to :asg-expr :action [:add-paren :out-oparen]}
                               {:where :ws :to :asg-expr}]
     :expr-num                [{:where :num :to :expr-num :action :eat}
                               {:where :newline :to :stmt :action :out-num}
                               {:where :end :to :halt :action :out-num}
                               {:where :op :to :asg-expr :action [:out-num :eat :out-op]}
+                              {:where :cparen :to :expr-op :action [:del-paren :out-num :out-cparen]}
                               {:where :ws :to :expr-op :action :out-num}]
     :expr-op                 [{:where :ws :to :expr-op}
                               {:where :newline :to :stmt}
                               {:where :end :to :halt}
+                              {:where :cparen :to :expr-op :action [:del-paren :out-cparen]}
                               {:where :op :to :asg-expr :action [:eat :out-op]}]
     :asg-end                 [{:where :ws :to :asg-end}
                               {:where :newline :to :stmt}
@@ -38,4 +42,4 @@
 (defn -main
   "I don't do a whole lot ... yet."
   [& _]
-  (run language " abc=  34* 7  \n\n a = 5 - 7  \n\n \n\n // this is a comment \nbc=1\na = 456 "))
+  (run language "a=5+(7)\nabc = 5 + (7)\nab = ( 5 )\nn = ( 7 / (2+3))"))
