@@ -39,4 +39,4 @@
 (defn -main
   "I don't do a whole lot ... yet."
   [& _]
-  (run language "a=5+7\nabc = 5 + (7)\nab = ( 5 )\nn = ( 7 / (2+3))"))
+  (run language " // this is a comment\n\na=5+7\nabc = 5 + (7)\nab = ( 5 )\nn = ( 7 / (2+3))"))
