@@ -19,7 +19,7 @@
     ;; assignments begin with a token
     :asg-token               [{:where :irest :to :asg-token :action :eat}
                               {:where :ws :to :asg-equal :action :out-token}
-                              {:where :equal :to :asg-expr :action :out-token-and-equal}]
+                              {:where :equal :to :asg-expr :action [:out-token :out-equal]}]
     :asg-equal               [{:where :equal :to :asg-expr :action :out-equal}]
     :asg-expr                [{:where :ws :to :asg-expr}
                               {:where :one :to :asg-end :action :out-one}]

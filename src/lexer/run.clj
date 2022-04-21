@@ -3,28 +3,26 @@
 (defn- run-action
   "Perform different actions"
   [state action symbol]
-  (case action
-    :eat (update-in state [:token] #(str % symbol))
-    :invalid (do
-               (println "INVALID SYMBOL")
-               state)
-    :out-comment (do
-                   (println "COMMENT:" (:token state))
-                   (assoc-in state [:token] ""))
-    :out-token (do
-                 (println "TOKEN:" (:token state))
-                 (assoc-in state [:token] ""))
-    :out-equal (do
-                 (println "EQUAL")
-                 (assoc-in state [:token] ""))
-    :out-token-and-equal (do
-                           (println "TOKEN:" (:token state))
-                           (println "EQUAL")
-                           (assoc-in state [:token] ""))
-    :out-one (do
-               (println "ONE")
-               state)
-    state))
+  (cond
+    (vector? action) (reduce #(run-action %1 %2 symbol) state action)
+    (keyword? action) (case action
+                        :eat (update-in state [:token] #(str % symbol))
+                        :invalid (do
+                                   (println "INVALID SYMBOL")
+                                   state)
+                        :out-comment (do
+                                       (println "COMMENT:" (:token state))
+                                       (assoc-in state [:token] ""))
+                        :out-token (do
+                                     (println "TOKEN:" (:token state))
+                                     (assoc-in state [:token] ""))
+                        :out-equal (do
+                                     (println "EQUAL")
+                                     (assoc-in state [:token] ""))
+                        :out-one (do
+                                   (println "ONE")
+                                   state)
+                        state)))
 
 (defn- match-symbol
   "Defines the different kinds of symbols"
