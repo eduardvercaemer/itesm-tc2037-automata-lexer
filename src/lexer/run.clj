@@ -43,13 +43,19 @@
     :any true
     :end (= symbol nil)))
 
+(defn- transition-matches?
+  "Wheter a transition matches a symbol or not"
+  [symbol {where :where}]
+  (cond
+    (vector? where) (first (filter #(match-symbol % symbol) where))
+    (keyword? where) (match-symbol where symbol)))
+
 (defn- find-transition
   "Find the first valid transition for a symbol"
   [transitions symbol]
-  (let [matches? #(match-symbol (:where %) symbol)]
-    (or
-     (first (filter matches? transitions))
-     {:where :any :to :halt :action :invalid})))
+  (or
+   (first (filter (partial transition-matches? symbol) transitions))
+   {:where :any :to :halt :action :invalid}))
 
 (defn run
   "Run an automata

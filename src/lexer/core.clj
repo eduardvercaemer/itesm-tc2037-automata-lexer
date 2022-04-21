@@ -6,8 +6,7 @@
   {:start :stmt
    :transitions
    {;; statements
-    :stmt                    [{:where :ws :to :stmt}
-                              {:where :newline :to :stmt}
+    :stmt                    [{:where [:ws :newline] :to :stmt}
                               {:where :end :to :halt}
                               {:where :slash :to :cmt-0 :action :eat}
                               {:where :istart :to :asg-token :action :eat}]
@@ -30,4 +29,4 @@
 (defn -main
   "I don't do a whole lot ... yet."
   [& _]
-  (run language " abc=  1  \n // this is a comment \nbc=1\na =1"))
+  (run language " abc=  1  \n\n  \n\n \n\n // this is a comment \nbc=1\na =1"))
