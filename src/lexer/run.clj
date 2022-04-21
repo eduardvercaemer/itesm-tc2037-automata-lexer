@@ -6,51 +6,52 @@
   ;;(prn {:in "RUN-ACTION" :state state :action action})
   (cond
     (vector? action) (reduce #(run-action %1 %2 symbol) state action)
-    (keyword? action) (case action
-                        :eat (update-in state [:token] #(str % symbol))
-                        :invalid (do
-                                   (println "INVALID SYMBOL")
-                                   state)
-                        :out-comment (do
-                                       (println "COMMENT:" (:token state))
-                                       (assoc-in state [:token] ""))
-                        :out-token (do
-                                     (println "TOKEN:" (:token state))
-                                     (assoc-in state [:token] ""))
-                        :out-equal (do
-                                     (println "EQUAL")
-                                     (assoc-in state [:token] ""))
-                        :out-one (do
-                                   (println "ONE")
-                                   state)
-                        :out-num (do
-                                   (println "NUM:" (:token state))
-                                   (assoc-in state [:token] ""))
-                        :out-op (do
-                                  (println "OP:" (:token state))
-                                  (assoc-in state [:token] ""))
-                        :add-paren (update-in state [:paren] inc)
-                        :del-paren (let [paren (:paren state)]
-                                     (cond
-                                       (> paren 0) (update-in state [:paren] dec)
-                                       :else (do
-                                               (println "INVALID CLOSING PARENTHESIS")
-                                               (assoc-in state [:invalid] true))))
-                        :out-oparen (do
-                                      (println "(")
-                                      state)
-                        :out-cparen (do
-                                      (println ")")
-                                      state)
-                        :check-paren (let [paren (:paren state)]
-                                       (cond
-                                         (> paren 0) (do
-                                                       (println "PARENTHESIS NOT CLOSED CORRECTLY")
-                                                       (assoc-in state [:invalid] true))
-                                         :else state))
-                        (do
-                          (println "INVALID ACTION" action)
-                          state))
+    (keyword? action)
+    (case action
+      :eat (update-in state [:token] #(str % symbol))
+      :invalid (do
+                 (println "INVALID SYMBOL")
+                 state)
+      :out-comment (do
+                     (println "COMMENT:" (:token state))
+                     (assoc-in state [:token] ""))
+      :out-token (do
+                   (println "TOKEN:" (:token state))
+                   (assoc-in state [:token] ""))
+      :out-equal (do
+                   (println "EQUAL")
+                   (assoc-in state [:token] ""))
+      :out-one (do
+                 (println "ONE")
+                 state)
+      :out-num (do
+                 (println "NUM:" (:token state))
+                 (assoc-in state [:token] ""))
+      :out-op (do
+                (println "OP:" (:token state))
+                (assoc-in state [:token] ""))
+      :add-paren (update-in state [:paren] inc)
+      :del-paren (let [paren (:paren state)]
+                   (cond
+                     (> paren 0) (update-in state [:paren] dec)
+                     :else (do
+                             (println "INVALID CLOSING PARENTHESIS")
+                             (assoc-in state [:invalid] true))))
+      :out-oparen (do
+                    (println "(")
+                    state)
+      :out-cparen (do
+                    (println ")")
+                    state)
+      :check-paren (let [paren (:paren state)]
+                     (cond
+                       (> paren 0) (do
+                                     (println "PARENTHESIS NOT CLOSED CORRECTLY")
+                                     (assoc-in state [:invalid] true))
+                       :else state))
+      (do
+        (println "INVALID ACTION" action)
+        state))
     :else state))
 
 (defn- match-symbol
