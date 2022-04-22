@@ -5,12 +5,12 @@
 (def language
   {:start :stmt
    :transitions
-   {;; statements
+   {;; statements, are either empty, comments, or assignemnts
     :stmt                    [{:where [:ws :newline] :to :stmt}
                               {:where :end :to :halt}
                               {:where :slash :to :cmt-0 :action :eat}
                               {:where :istart :to :asg-token :action :eat}]
-    ;; comments begin with two slashes
+    ;; comments begin with two slashes and end with a newline
     :cmt-0                   [{:where :slash :to :cmt-1 :action :eat}]
     :cmt-1                   [{:where :newline :to :stmt :action :out-comment}
                               {:where :end :to :halt :action :out-comment}
@@ -19,17 +19,20 @@
     :asg-token               [{:where :irest :to :asg-token :action :eat}
                               {:where :ws :to :asg-equal :action :out-token}
                               {:where :equal :to :asg-expr :action [:out-token :out-equal]}]
+    ;; then have an assignment operator
     :asg-equal               [{:where :equal :to :asg-expr :action :out-equal}]
-    ;; beginning of expression
+    ;; then have an expression
     :asg-expr                [{:where :num :to :expr-num :action :eat}
                               {:where :oparen :to :asg-expr :action [:add-paren :out-oparen]}
                               {:where :ws :to :asg-expr}]
+    ;; expressions have numeric parts
     :expr-num                [{:where :num :to :expr-num :action :eat}
                               {:where :newline :to :stmt :action [:check-paren :out-num]}
                               {:where :end :to :halt :action [:check-paren :out-num]}
                               {:where :op :to :asg-expr :action [:out-num :eat :out-op]}
                               {:where :cparen :to :expr-op :action [:del-paren :out-num :out-cparen]}
                               {:where :ws :to :expr-op :action :out-num}]
+    ;; separated by operators
     :expr-op                 [{:where :ws :to :expr-op}
                               {:where :newline :to :stmt :action :check-paren}
                               {:where :end :to :halt :action :check-paren}
