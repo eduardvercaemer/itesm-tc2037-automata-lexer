@@ -76,6 +76,8 @@
       :upper (and (>= (int symbol) (int \A)) (<= (int symbol) (int \Z)))
       :dot (= symbol \.)
       :under (= symbol \_)
+      :minus (= symbol \-)
+      :e-notation (or (= symbol \e) (= symbol \E))
       :alpha (or (match-symbol :lower symbol) (match-symbol :upper symbol))
       :istart (or (match-symbol :alpha symbol) (match-symbol :under symbol))
       :irest (or (match-symbol :istart symbol) (match-symbol :num symbol))

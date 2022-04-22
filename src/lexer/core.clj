@@ -38,7 +38,18 @@
     ;; floats are slightly more complex numbers with a decimal part
     :expr-float              [{:where :num :to :expr-float-rest :action :eat}]
     :expr-float-rest         [{:where :end :to :halt :action [:check-paren :out-float]}
+                              {:where :e-notation :to :expr-float-exponent :action :eat}
                               {:where :num :to :expr-float-rest :action :eat}
+                              {:where :newline :to :stmt :action [:check-paren :out-float]}
+                              {:where :slash :to :expr-cmt-0 :action [:out-float :eat]}
+                              {:where :op :to :asg-expr :action [:out-float :eat :out-op]}
+                              {:where :cparen :to :expr-op :action [:del-paren :out-float :out-cparen]}
+                              {:where :ws :to :expr-op :action :out-float}]
+    :expr-float-exponent     [{:where :num :to :expr-float-exponent-r :action :eat}
+                              {:where :minus :to :expr-float-exponent-n :action :eat}]
+    :expr-float-exponent-n   [{:where :num :to :expr-float-exponent-r :action :eat}]
+    :expr-float-exponent-r   [{:where :end :to :halt :action [:check-paren :out-float]}
+                              {:where :num :to :expr-float-exponent-r :action :eat}
                               {:where :newline :to :stmt :action [:check-paren :out-float]}
                               {:where :slash :to :expr-cmt-0 :action [:out-float :eat]}
                               {:where :op :to :asg-expr :action [:out-float :eat :out-op]}
@@ -78,5 +89,7 @@
                value = 9 + (xyz)//or with no spaces !
                value = foo / bar
                value = 5 * 4.32 + abc // now we have floats
-               value = 4. // invalid float !"]
+               value = 4.6e1000 // and scientific notation !
+               value = 1.12E-14 // also negative !
+               value = 1.1E // invalid !"]
     (run language input)))
