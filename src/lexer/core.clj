@@ -24,8 +24,14 @@
     ;; then have an expression
     :asg-expr                [{:where :num :to :expr-num :action :eat}
                               {:where :istart :to :expr-token :action :eat}
+                              {:where :minus :to :asg-expr-m :action :eat}
                               {:where :oparen :to :asg-expr :action [:add-paren :out-oparen]}
                               {:where :ws :to :asg-expr}]
+    ;; this allows for negative values (unary '-' operator)
+    :asg-expr-m              [{:where :num :to :expr-num :action :eat}
+                              {:where :istart :to :expr-token :action :eat}
+                              {:where :oparen :to :asg-expr :action [:out-op :add-paren :out-oparen]}
+                              {:where :ws :to :asg-expr-m}]
     ;; expressions have numeric parts
     :expr-num                [{:where :end :to :halt :action [:check-paren :out-num]}
                               {:where :dot :to :expr-float :action :eat}
@@ -91,5 +97,9 @@
                value = 5 * 4.32 + abc // now we have floats
                value = 4.6e1000 // and scientific notation !
                value = 1.12E-14 // also negative !
-               value = 1.1E // invalid !"]
+               value = -4 // now we have negatives !
+               value = -3.14E-10 // also with floats !
+               value = - abc // or variables
+               value = - ( 4.13 - a) // or even parenthesized expressions
+               value = -(-(-4)) // nested negatives !"]
     (run language input)))
