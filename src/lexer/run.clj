@@ -3,59 +3,38 @@
 (defn- run-action
   "Perform different actions"
   [state action symbol]
-  ;;(prn {:in "RUN-ACTION" :state state :action action})
-  (cond
-    (vector? action) (reduce #(run-action %1 %2 symbol) state action)
-    (keyword? action)
-    (case action
-      :eat (update-in state [:token] #(str % symbol))
-      :invalid (do
-                 (println "INVALID SYMBOL")
-                 state)
-      :out-comment (do
-                     (println "COMMENT:" (:token state))
-                     (assoc-in state [:token] ""))
-      :out-token (do
-                   (println "TOKEN:" (:token state))
-                   (assoc-in state [:token] ""))
-      :out-equal (do
-                   (println "EQUAL")
-                   (assoc-in state [:token] ""))
-      :out-one (do
-                 (println "ONE")
-                 state)
-      :out-num (do
-                 (println "NUM:" (:token state))
-                 (assoc-in state [:token] ""))
-      :out-float (do
-                 (println "FLOAT:" (:token state))
-                 (assoc-in state [:token] ""))
-      :out-op (do
-                (println "OP:" (:token state))
+  (let [out (fn [msg]
+              (println msg)
+              state)
+        out-t (fn [msg]
+                (println (str msg ":") (:token state))
                 (assoc-in state [:token] ""))
-      :add-paren (update-in state [:paren] inc)
-      :del-paren (let [paren (:paren state)]
-                   (cond
-                     (> paren 0) (update-in state [:paren] dec)
-                     :else (do
-                             (println "INVALID CLOSING PARENTHESIS")
-                             (assoc-in state [:invalid] true))))
-      :out-oparen (do
-                    (println "(")
-                    state)
-      :out-cparen (do
-                    (println ")")
-                    state)
-      :check-paren (let [paren (:paren state)]
-                     (cond
-                       (> paren 0) (do
-                                     (println "PARENTHESIS NOT CLOSED CORRECTLY")
-                                     (assoc-in state [:invalid] true))
-                       :else state))
-      (do
-        (println "INVALID ACTION" action)
-        state))
-    :else state))
+        invalid (fn [msg]
+                  (println "INVALID:" msg)
+                  (assoc-in state [:invalid] true))]
+    (cond
+      (vector? action) (reduce #(run-action %1 %2 symbol) state action)
+      (keyword? action)
+      (case action
+        :eat (update-in state [:token] #(str % symbol))
+        :invalid (out "INVALID SYMBOL")
+        :out-comment (out-t "COMMENT")
+        :out-token (out-t "VARIABLE")
+        :out-equal (out "EQUAL")
+        :out-num (out-t "INTEGER")
+        :out-float (out-t "FLOAT")
+        :out-op (out-t "OP")
+        :add-paren (update-in state [:paren] inc)
+        :del-paren (if (> (:paren state) 0)
+                     (update-in state [:paren] dec)
+                     (invalid "NO MATCHING OPENNING PARENTHESIS"))
+        :out-oparen (out "(")
+        :out-cparen (out ")")
+        :check-paren (if (> (:paren state) 0)
+                       (invalid "NO MATCHING CLOSING PARENTHESIS")
+                       state)
+        (invalid (str "INVALID ACTION '" action "'")))
+      :else state)))
 
 (defn- match-symbol
   "Defines the different kinds of symbols"
@@ -63,21 +42,21 @@
   (if (nil? symbol)
     (= where :end)
     (case where
-      :ws (= symbol \ )
+      :ws (= symbol \space)
       :newline (= symbol \newline)
       :one (= symbol \1)
       :equal (= symbol \=)
       :slash (= symbol \/)
       :oparen (= symbol \()
       :cparen (= symbol \))
-      :op (contains? #{\+ \* \- \/ \^} symbol)
-      :num (and (>= (int symbol) (int \0)) (<= (int symbol) (int \9)))
-      :lower (and (>= (int symbol) (int \a)) (<= (int symbol) (int \z)))
-      :upper (and (>= (int symbol) (int \A)) (<= (int symbol) (int \Z)))
       :dot (= symbol \.)
       :under (= symbol \_)
       :minus (= symbol \-)
       :e-notation (or (= symbol \e) (= symbol \E))
+      :op (contains? #{\+ \* \- \/ \^} symbol)
+      :num (and (>= (int symbol) (int \0)) (<= (int symbol) (int \9)))
+      :lower (and (>= (int symbol) (int \a)) (<= (int symbol) (int \z)))
+      :upper (and (>= (int symbol) (int \A)) (<= (int symbol) (int \Z)))
       :alpha (or (match-symbol :lower symbol) (match-symbol :upper symbol))
       :istart (or (match-symbol :alpha symbol) (match-symbol :under symbol))
       :irest (or (match-symbol :istart symbol) (match-symbol :num symbol))
