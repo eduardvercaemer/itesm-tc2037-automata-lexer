@@ -87,7 +87,9 @@
 (defn -main
   "Read and lex input file with language definition"
   [& _]
+  (print "Input filename: ")
+  (flush)
   (->>
-   (io/resource "example.txt")
+   (read-line)
    slurp
    (run language)))
