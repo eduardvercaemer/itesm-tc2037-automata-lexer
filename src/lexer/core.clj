@@ -85,7 +85,7 @@
                               {:where :op :to :asg-expr :action [:eat :out-op]}]}})
 
 (defn -main
-  "I don't do a whole lot ... yet."
+  "Read and lex input file with language definition"
   [& _]
   (->>
    (io/resource "example.txt")
