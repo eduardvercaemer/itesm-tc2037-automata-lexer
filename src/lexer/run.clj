@@ -27,6 +27,9 @@
       :out-num (do
                  (println "NUM:" (:token state))
                  (assoc-in state [:token] ""))
+      :out-float (do
+                 (println "FLOAT:" (:token state))
+                 (assoc-in state [:token] ""))
       :out-op (do
                 (println "OP:" (:token state))
                 (assoc-in state [:token] ""))
@@ -71,6 +74,7 @@
       :num (and (>= (int symbol) (int \0)) (<= (int symbol) (int \9)))
       :lower (and (>= (int symbol) (int \a)) (<= (int symbol) (int \z)))
       :upper (and (>= (int symbol) (int \A)) (<= (int symbol) (int \Z)))
+      :dot (= symbol \.)
       :under (= symbol \_)
       :alpha (or (match-symbol :lower symbol) (match-symbol :upper symbol))
       :istart (or (match-symbol :alpha symbol) (match-symbol :under symbol))

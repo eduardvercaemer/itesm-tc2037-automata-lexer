@@ -28,12 +28,22 @@
                               {:where :ws :to :asg-expr}]
     ;; expressions have numeric parts
     :expr-num                [{:where :end :to :halt :action [:check-paren :out-num]}
+                              {:where :dot :to :expr-float :action :eat}
                               {:where :num :to :expr-num :action :eat}
                               {:where :newline :to :stmt :action [:check-paren :out-num]}
                               {:where :slash :to :expr-cmt-0 :action [:out-num :eat]}
                               {:where :op :to :asg-expr :action [:out-num :eat :out-op]}
                               {:where :cparen :to :expr-op :action [:del-paren :out-num :out-cparen]}
                               {:where :ws :to :expr-op :action :out-num}]
+    ;; floats are slightly more complex numbers with a decimal part
+    :expr-float              [{:where :num :to :expr-float-rest :action :eat}]
+    :expr-float-rest         [{:where :end :to :halt :action [:check-paren :out-float]}
+                              {:where :num :to :expr-float-rest :action :eat}
+                              {:where :newline :to :stmt :action [:check-paren :out-float]}
+                              {:where :slash :to :expr-cmt-0 :action [:out-float :eat]}
+                              {:where :op :to :asg-expr :action [:out-float :eat :out-op]}
+                              {:where :cparen :to :expr-op :action [:del-paren :out-float :out-cparen]}
+                              {:where :ws :to :expr-op :action :out-float}]
     ;; expressions can also have tokens instead of a numeric part
     :expr-token              [{:where :end :to :halt :action [:check-paren :out-token]}
                               {:where :irest :to :expr-token :action :eat}
@@ -67,5 +77,6 @@
                value = 65 + a // also after tokens !
                value = 9 + (xyz)//or with no spaces !
                value = foo / bar
-               value = 5 * (6 / (2) // fails on bad parenthesis !"]
+               value = 5 * 4.32 + abc // now we have floats
+               value = 4. // invalid float !"]
     (run language input)))
