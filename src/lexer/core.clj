@@ -1,5 +1,6 @@
 (ns lexer.core
-  (:require [lexer.run :refer [run]])
+  (:require [lexer.run :refer [run]]
+            [clojure.java.io :as io])
   (:gen-class))
 
 (def language
@@ -86,20 +87,7 @@
 (defn -main
   "I don't do a whole lot ... yet."
   [& _]
-  (let [input "// this is a comment
-               a = 5
-               
-               _678=(a * 2) + (6 / _2 * (3 - 1))
-               value = 35 // with comment at the end !
-               value = 65 + a // also after tokens !
-               value = 9 + (xyz)//or with no spaces !
-               value = foo / bar
-               value = 5 * 4.32 + abc // now we have floats
-               value = 4.6e1000 // and scientific notation !
-               value = 1.12E-14 // also negative !
-               value = -4 // now we have negatives !
-               value = -3.14E-10 // also with floats !
-               value = - abc // or variables
-               value = - ( 4.13 - a) // or even parenthesized expressions
-               value = -(-(-4)) // nested negatives !"]
-    (run language input)))
+  (->>
+   (io/resource "example.txt")
+   slurp
+   (run language)))

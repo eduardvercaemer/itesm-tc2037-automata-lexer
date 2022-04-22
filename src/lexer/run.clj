@@ -42,7 +42,7 @@
   (if (nil? symbol)
     (= where :end)
     (case where
-      :ws (= symbol \space)
+      :ws (contains? #{\space \return} symbol)
       :newline (= symbol \newline)
       :one (= symbol \1)
       :equal (= symbol \=)
@@ -52,7 +52,7 @@
       :dot (= symbol \.)
       :under (= symbol \_)
       :minus (= symbol \-)
-      :e-notation (or (= symbol \e) (= symbol \E))
+      :e-notation (contains? #{\e \E} symbol)
       :op (contains? #{\+ \* \- \/ \^} symbol)
       :num (and (>= (int symbol) (int \0)) (<= (int symbol) (int \9)))
       :lower (and (>= (int symbol) (int \a)) (<= (int symbol) (int \z)))
