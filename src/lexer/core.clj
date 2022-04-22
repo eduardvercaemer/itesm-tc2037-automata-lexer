@@ -1,6 +1,5 @@
 (ns lexer.core
-  (:require [lexer.run :refer [run]]
-            [clojure.java.io :as io])
+  (:require [lexer.run :refer [run]])
   (:gen-class))
 
 (def language
