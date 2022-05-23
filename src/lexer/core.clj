@@ -20,7 +20,8 @@
                               {:where :ws :to :asg-equal :action :out-token}
                               {:where :equal :to :asg-expr :action [:out-token :out-equal]}]
     ;; then have an assignment operator
-    :asg-equal               [{:where :equal :to :asg-expr :action :out-equal}]
+    :asg-equal               [{:where :equal :to :asg-expr :action :out-equal}
+                              {:where :ws :to :asg-equal}]
     ;; then have an expression
     :asg-expr                [{:where :num :to :expr-num :action :eat}
                               {:where :istart :to :expr-token :action :eat}
