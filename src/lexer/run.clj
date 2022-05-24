@@ -51,6 +51,7 @@
     (= where :end)
     (case where
       :ws (contains? #{\space \return} symbol)
+      :return (= symbol \return)
       :newline (= symbol \newline)
       :one (= symbol \1)
       :equal (= symbol \=)

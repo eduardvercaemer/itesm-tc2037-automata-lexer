@@ -15,6 +15,7 @@
     ;; comments begin with two slashes and end with a newline
     :cmt-0                   [{:where :slash :to :cmt-1 :action :eat}]
     :cmt-1                   [{:where :end :to :halt :action :out-comment}
+                              {:where :return :to :cmt-1}
                               {:where :newline :to :stmt :action [:out-comment :linebreak]}
                               {:where :any :to :cmt-1 :action :eat}]
     ;; assignments begin with a token
