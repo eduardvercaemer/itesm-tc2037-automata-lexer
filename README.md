@@ -11,7 +11,7 @@ compuesto por asignaciones y expresiones.
 El modulo _html_ nos permite generar archivos html con resaltamiento
 de la sintaxis del lenguaje.
 
-![image](https://user-images.githubusercontent.com/40474768/169931115-48772618-0c9e-4db1-8d69-28bc4110dc22.png)
+![image](https://user-images.githubusercontent.com/40474768/169939311-cd6b2a50-7028-4b43-a6f8-a63b8b3becc0.png)
 
 ## requeriminetos para desarollar
 
