@@ -4,26 +4,29 @@
      <title>automata</title>
    </head>
    <body>
-     <pre><span class="code COMMENT">// a comment</span><br><span class="code VARIABLE">a</span><span class="code OP">=</span><span class="code INTEGER">5</span><br><br><span class="code VARIABLE">_boo</span><span class="code OP">=</span><span class="code INTEGER">7</span><span class="code OP">*</span><span class="code OP">(</span><span class="code INTEGER">4</span><span class="code OP">-</span><span class="code OP">(</span><span class="code FLOAT">7.3E-35</span><span class="code OP">*</span><span class="code VARIABLE">a</span><span class="code OP">)</span><span class="code OP">)</span><span class="code OP">/</span><span class="code OP">(</span><span class="code INTEGER">-5</span><span class="code OP">)</span><br><br><span class="code VARIABLE">_boo</span><span class="code OP">=</span><span class="code VARIABLE">_boo</span><span class="code OP">*</span><span class="code INTEGER">2</span><span class="code OP">*</span><span class="code INTEGER">3</span><span class="code OP">*</span><span class="code OP">(</span><span class="code INTEGER">4</span><span class="code OP">-</span><span class="code INTEGER">1</span><span class="code OP">)</span><span class="code COMMENT">// this is a comment at the end of line</span><br></pre>
+     <pre><span class="code COMMENT">// a comment</span><br><span class="code VARIABLE">a</span><span class="code OP">=</span><span class="code INTEGER">5</span><br><br><span class="code COMMENT">// a simple expression</span><br><span class="code VARIABLE">b</span><span class="code OP">=</span><span class="code VARIABLE">a</span><span class="code OP">+</span><span class="code INTEGER">5</span><span class="code OP">/</span><span class="code INTEGER">7</span><br><br><span class="code COMMENT">// parenthesis</span><br><span class="code VARIABLE">c</span><span class="code OP">=</span><span class="code OP">(</span><span class="code VARIABLE">a</span><span class="code OP">/</span><span class="code VARIABLE">b</span><span class="code OP">)</span><span class="code OP">+</span><span class="code OP">(</span><span class="code VARIABLE">b</span><span class="code OP">*</span><span class="code INTEGER">2</span><span class="code OP">)</span><br><br><span class="code COMMENT">// float literals</span><br><span class="code VARIABLE">_boo</span><span class="code OP">=</span><span class="code FLOAT">7.1E-10</span><br><br><span class="code COMMENT">// nested parenthesis</span><br><span class="code VARIABLE">_123</span><span class="code OP">=</span><span class="code OP">(</span><span class="code OP">(</span><span class="code INTEGER">1</span><span class="code OP">)</span><span class="code OP">*</span><span class="code OP">(</span><span class="code INTEGER">2</span><span class="code OP">/</span><span class="code INTEGER">3</span><span class="code OP">)</span><span class="code OP">)</span><span class="code OP">-</span><span class="code OP">(</span><span class="code INTEGER">-4</span><span class="code OP">*</span><span class="code OP">(</span><span class="code INTEGER">5</span><span class="code OP">/</span><span class="code VARIABLE">a</span><span class="code OP">)</span><span class="code OP">)</span><br><br><span class="code VARIABLE">foo</span><span class="code OP">=</span><span class="code VARIABLE">_123</span><span class="code OP">*</span><span class="code INTEGER">2</span><span class="code COMMENT">// end of line comment</span><br></pre>
      <style type="text/css">
+       body {
+          background-color: #282c34;
+       }
        .code {
           font-family: monospace;
           font-size: 1.2em;
        }
        .COMMENT {
-          color: #525252;
+          color: #abb2bf;
        }
        .VARIABLE {
-          color: #575700;
+          color: #61afef;
        }
        .OP {
            color: #005757;
        }
        .INTEGER {
-           color: #ff4500;
+           color: #e06c75;
        }
        .FLOAT {
-           color: #ff4500;
+           color: #e06c75;
        }
      </style>
    </body>

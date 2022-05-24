@@ -1,6 +1,16 @@
 // a comment
-  a  =  5
+a  =  5
 
-_boo= 7 * (4 - (7.3E-35 * a)) / (-5)
+// a simple expression
+b = a + 5 / 7
 
-_boo = _boo * 2 * 3 * (4 - 1) // this is a comment at the end of line
+// parenthesis
+c = (a / b) + (b * 2)
+
+// float literals
+_boo = 7.1E-10
+
+// nested parenthesis
+_123 = ((1) * (2 / 3)) - (-4*(5 / a))
+
+foo = _123 * 2 // end of line comment

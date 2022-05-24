@@ -19,24 +19,27 @@
    <body>
      <pre>%s</pre>
      <style type=\"text/css\">
+       body {
+          background-color: #282c34;
+       }
        .code {
           font-family: monospace;
           font-size: 1.2em;
        }
        .COMMENT {
-          color: #525252;
+          color: #abb2bf;
        }
        .VARIABLE {
-          color: #575700;
+          color: #61afef;
        }
        .OP {
            color: #005757;
        }
        .INTEGER {
-           color: #ff4500;
+           color: #e06c75;
        }
        .FLOAT {
-           color: #ff4500;
+           color: #e06c75;
        }
      </style>
    </body>
