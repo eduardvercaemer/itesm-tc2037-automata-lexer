@@ -84,6 +84,22 @@
                               {:where :slash :to :expr-cmt-0 :action :eat}
                               {:where :op :to :asg-expr :action [:eat :out-op]}]}})
 
+(defn- lex-input
+  "Read an input file and produce a list of tokens"
+  [filename]
+  (->>
+   filename
+   slurp
+   (run language)))
+
+(defn- show-tokens
+  "Prints information on a list of tokens"
+  [tokens]
+  (->>
+   tokens
+   (doseq [{kind :kind value :value} tokens]
+     (println (str "Token: " kind " " value)))))
+
 (defn -main
   "Read and lex input file with language definition"
   [& _]
@@ -91,5 +107,5 @@
   (flush)
   (->>
    (read-line)
-   slurp
-   (run language)))
+   lex-input
+   show-tokens))

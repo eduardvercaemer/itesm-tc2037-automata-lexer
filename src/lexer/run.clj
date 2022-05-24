@@ -3,28 +3,35 @@
 (defn- run-action
   "Perform different actions"
   [state action symbol]
-  (let [out (fn [msg]
-              (println msg)
-              state)
-        out-t (fn [msg]
-                (println (str msg ":") (:token state))
-                (assoc-in state [:token] ""))
-        invalid (fn [msg]
-                  (println "INVALID:" msg)
-                  (assoc-in state [:invalid] true))]
+  (let [out
+        (fn [kind]
+          (->
+           state
+           (update :tokens #(conj % {:kind kind}))))
+        out-t
+        (fn [kind]
+          (->
+           state
+           (update :tokens #(conj % {:kind kind
+                                     :value (:token state)}))
+           (assoc :token "")))
+        invalid
+        (fn [msg]
+          (println "INVALID:" msg)
+          (assoc state :invalid true))]
     (cond
       (vector? action) (reduce #(run-action %1 %2 symbol) state action)
       (keyword? action)
       (case action
-        :eat (update-in state [:token] #(str % symbol))
-        :invalid (out "INVALID SYMBOL")
+        :eat (update state :token #(str % symbol))
+        :invalid (invalid "")
         :out-comment (out-t "COMMENT")
         :out-token (out-t "VARIABLE")
         :out-equal (out "EQUAL")
         :out-num (out-t "INTEGER")
         :out-float (out-t "FLOAT")
         :out-op (out-t "OP")
-        :add-paren (update-in state [:paren] inc)
+        :add-paren (update state :paren inc)
         :del-paren (if (> (:paren state) 0)
                      (update-in state [:paren] dec)
                      (invalid "NO MATCHING OPENNING PARENTHESIS"))
@@ -88,7 +95,7 @@
   (let [input (seq input)]
     (loop [curr (:start automata)
            [symbol & rest] input
-           state {:token "" :paren 0}]
+           state {:token "" :paren 0 :tokens []}]
       ;;(prn {:curr curr :symbol symbol :state state})
       (let [transitions (get-in automata [:transitions curr])
             transition (find-transition transitions symbol)
@@ -96,7 +103,7 @@
             action (:action transition)
             state (run-action state action symbol)
             invalid (:invalid state)]
-        (if invalid nil
+        (if invalid (throw (new Exception "invalid state"))
             (case to
-              :halt nil
+              :halt (:tokens state)
               (recur to rest state)))))))
