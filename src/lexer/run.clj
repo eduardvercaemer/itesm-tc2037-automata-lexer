@@ -4,10 +4,10 @@
   "Perform different actions"
   [state action symbol]
   (let [out
-        (fn [kind]
+        (fn [kind value]
           (->
            state
-           (update :tokens #(conj % {:kind kind}))))
+           (update :tokens #(conj % {:kind kind :value value}))))
         out-t
         (fn [kind]
           (->
@@ -27,7 +27,7 @@
         :invalid (invalid "")
         :out-comment (out-t "COMMENT")
         :out-token (out-t "VARIABLE")
-        :out-equal (out "EQUAL")
+        :out-equal (out "OP" "=")
         :out-num (out-t "INTEGER")
         :out-float (out-t "FLOAT")
         :out-op (out-t "OP")
@@ -35,8 +35,8 @@
         :del-paren (if (> (:paren state) 0)
                      (update-in state [:paren] dec)
                      (invalid "NO MATCHING OPENNING PARENTHESIS"))
-        :out-oparen (out "(")
-        :out-cparen (out ")")
+        :out-oparen (out "OP" "(")
+        :out-cparen (out "OP" ")")
         :check-paren (if (> (:paren state) 0)
                        (invalid "NO MATCHING CLOSING PARENTHESIS")
                        state)

@@ -1,5 +1,6 @@
 (ns lexer.core
-  (:require [lexer.run :refer [run]])
+  (:require [lexer.run :refer [run]]
+            [lexer.html :refer [htmlize-tokens]])
   (:gen-class))
 
 (def language
@@ -100,7 +101,7 @@
    (doseq [{kind :kind value :value} tokens]
      (println (str "Token: " kind " " value)))))
 
-(defn -main
+(defn- main-console
   "Read and lex input file with language definition"
   [& _]
   (print "Input filename: ")
@@ -109,3 +110,17 @@
    (read-line)
    lex-input
    show-tokens))
+
+;; first read input and output filename
+(defn- main-htmlize
+  [& _]
+  (let [input-filename (read-line)
+        output-filename (read-line)
+        tokens (lex-input input-filename)
+        html (htmlize-tokens tokens)]
+    (spit output-filename html)))
+
+(defn -main
+  "Read and lex input file with language definition"
+  [& _]
+  (main-htmlize))
