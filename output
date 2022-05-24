@@ -4,7 +4,7 @@
      <title>automata</title>
    </head>
    <body>
-     <pre><span class="code COMMENT">// a comment</span><span class="code VARIABLE">a</span><span class="code OP">=</span><span class="code INTEGER">5</span></pre>
+     <pre><span class="code COMMENT">// a comment</span><br></br><span class="code VARIABLE">a</span><span class="code OP">=</span><span class="code INTEGER">5</span><br></br></pre>
      <style type="text/css">
        .code {
           font-family: monospace;

@@ -3,10 +3,12 @@
 (defn- show-token
   "Converts a single token to its html representation"
   [{kind :kind value :value}]
-  (str
-   "<span class=\"code " kind
-   "\">" value
-   "</span>"))
+  (cond
+    (= kind "NEWLINE") "<br>"
+    :else (str
+           "<span class=\"code " kind
+           "\">" value
+           "</span>")))
 
 (def template
   "<!DOCTYPE html>

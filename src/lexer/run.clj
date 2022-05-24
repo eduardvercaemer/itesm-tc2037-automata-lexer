@@ -37,6 +37,7 @@
                      (invalid "NO MATCHING OPENNING PARENTHESIS"))
         :out-oparen (out "OP" "(")
         :out-cparen (out "OP" ")")
+        :linebreak (out "NEWLINE" "")
         :check-paren (if (> (:paren state) 0)
                        (invalid "NO MATCHING CLOSING PARENTHESIS")
                        state)
