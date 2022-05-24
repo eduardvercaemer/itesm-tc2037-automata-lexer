@@ -1,2 +1,6 @@
 // a comment
   a  =  5
+
+_boo= 7 * (4 - (7.3E-35 * a)) / (-5)
+
+_boo = _boo * 2 * 3 * (4 - 1) // this is a comment at the end of line

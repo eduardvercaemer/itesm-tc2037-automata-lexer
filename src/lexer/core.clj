@@ -116,11 +116,11 @@
 ;; first read input and output filename
 (defn- main-htmlize
   [& _]
-  (let [input-filename (read-line)
-        output-filename (read-line)
-        tokens (lex-input input-filename)
+  (let [;;input-filename (read-line)
+        ;;output-filename (read-line)
+        tokens (lex-input "input")
         html (htmlize-tokens tokens)]
-    (spit output-filename html)))
+    (spit "output.html" html)))
 
 (defn -main
   "Read and lex input file with language definition"

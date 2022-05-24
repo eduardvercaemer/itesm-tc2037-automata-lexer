@@ -30,7 +30,7 @@
           color: #575700;
        }
        .OP {
-           color: #ff2424;
+           color: #005757;
        }
        .INTEGER {
            color: #ff4500;
