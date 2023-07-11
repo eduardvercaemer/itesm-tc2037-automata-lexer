@@ -1,32 +1,31 @@
 # tc2037 - lexer
 
-Lexer creado en clojure basado en automatas finitos deterministas
+Lexer built in clojure based on finite deterministic automatas
 
-## funcionamiento
+## function
 
-A través de un mapa de estados y trancisiones (automata finito),
-se obtiene un _lexer_, que puede interpretar un sencillo _lenguaje_
-compuesto por asignaciones y expresiones.
+Through a state machine, a basic language that represents simple
+expressions can be parsed.
 
-El modulo _html_ nos permite generar archivos html con resaltamiento
-de la sintaxis del lenguaje.
+The html module allows us to generate html syntax highlighting
+that can be viewed on a browser.
 
 ![image](https://user-images.githubusercontent.com/40474768/169939311-cd6b2a50-7028-4b43-a6f8-a63b8b3becc0.png)
 
-## requeriminetos para desarollar
+## development requirements
 
 - [lein](https://leiningen.org/#install)
 
 ```sh
-# correr projecto
+# run project
 $ lein run
-# compilar .jar
+# compile .jar
 $ lein uberjar
 ```
 
-## utilización
+## use
 
-Descarga el .jar y correlo, solo se necesita java
+Download .jar and run, needs java installed
 ```sh
 $ java -jar lexer.jar
 ```
